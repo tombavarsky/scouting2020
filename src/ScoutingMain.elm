@@ -6,7 +6,7 @@ import Browser
 import Browser.Events as BE
 import Climbing
 import Colors exposing (blue, purple, white)
-import Element exposing (Device, centerX, centerY, column, el, fill, height, layout, padding, spacing, text, width)
+import Element exposing (Device, centerX, centerY, column, el, fill, height, htmlAttribute, layout, padding, spacing, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font exposing (center)
