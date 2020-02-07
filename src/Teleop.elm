@@ -1,10 +1,10 @@
-module Teleop exposing (Model, Msg, createButton, init, printButton, subscriptions, update, view, yophyTophy)
+module Teleop exposing (Model, Msg, boolToText, createButton, init, subscriptions, update, view, yophyTophy)
 
-import Colors exposing (black, blue, purple, sky, white)
+import Colors exposing (blue, purple, sky, white)
 import Counter
-import Element exposing (centerX, centerY, column, el, padding, row, spacing, text)
+import Element exposing (centerX, centerY, column, el, padding, spacing, text)
 import Element.Background as Background
-import Element.Border as Border exposing (rounded, widthXY)
+import Element.Border exposing (rounded)
 import Element.Font as Font exposing (center)
 import Element.Input exposing (button)
 
@@ -35,9 +35,9 @@ createButton : Msg -> String -> Element.Element Msg
 createButton msg name =
     button
         [ Font.color white
-        , Font.size 25
+        , Font.size 60
         , Font.glow blue 5
-        , Border.rounded 10
+        , rounded 10
         , Font.family
             [ Font.external
                 { name = "Open Sans"
@@ -50,22 +50,6 @@ createButton msg name =
         , centerY
         ]
         { onPress = Just msg, label = text name }
-
-
-printButton : String -> String -> Bool -> Element.Element Msg
-printButton onFalse onTrue modelBool =
-    el
-        [ center
-        , centerX
-        , centerY
-        ]
-        (text <|
-            if modelBool then
-                onTrue
-
-            else
-                onFalse
-        )
 
 
 update : Msg -> Model -> Model
@@ -96,33 +80,31 @@ view : Model -> Element.Element Msg
 view model =
     column
         [ Background.color sky
-        , Border.color black
         , padding 50
         , spacing 20
-        , widthXY 5 5
-        , rounded 10
+        , rounded 20
         , centerX
         , centerY
         ]
-        [ row yophyTophy
-            [ column yophyTophy
-                [ createButton ColorRoulette "spun to\ncorrect color?"
-                , printButton "no" "yes" model.colorRoulette
-                ]
-            , column yophyTophy
-                [ createButton SpunRoulette "spun cycles 3-5?"
-                , printButton "no" "yes" model.spunRoulette
-                ]
-            ]
+        [ el yophyTophy
+            (text "spun to\ncorrect color?")
+        , createButton ColorRoulette <| boolToText model.colorRoulette
+        , el yophyTophy
+            (text "spun cycles 3-5?")
+        , createButton SpunRoulette <| boolToText model.spunRoulette
         , Element.map LowLevel <| Counter.view "low Level:" model.lowlevel
         , Element.map HighLevel <| Counter.view "high Level:" model.highlevel
         , Element.map Missed <| Counter.view "missed:" model.missed
         ]
 
 
-subscriptions : Sub Msg
-subscriptions =
-    Sub.none
+boolToText : Bool -> String
+boolToText bool =
+    if bool then
+        "Yes"
+
+    else
+        "No"
 
 
 yophyTophy : List (Element.Attribute Msg)
@@ -131,4 +113,10 @@ yophyTophy =
     , spacing 5
     , centerX
     , centerY
+    , Font.size 60
     ]
+
+
+subscriptions : Sub Msg
+subscriptions =
+    Sub.none
